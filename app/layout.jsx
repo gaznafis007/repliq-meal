@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 // import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import TanstackProvider from "@/providers/TanstackProvider";
+import { CartProvider } from "@/context/ContextProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,8 +29,10 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <TanstackProvider>
-          <Navbar />
-          {children}
+          <CartProvider>
+            <Navbar />
+            {children}
+          </CartProvider>
         </TanstackProvider>
       </body>
     </html>

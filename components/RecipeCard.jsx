@@ -1,14 +1,24 @@
+"use client";
+import { useCart } from "@/hooks/useCart";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { IoCart } from "react-icons/io5";
 
 const RecipeCard = ({ recipe, handleDetailsOpen }) => {
+  const { addToCart } = useCart();
+  const [added, setAdded] = useState(false);
+  const handleAddToCart = () => {
+    addToCart(recipe);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 3000);
+  };
   return (
     <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition">
       <Link href={`/all-recipes/${recipe.idMeal}`} passHref>
         <Image
-        width={720}
-        height={360}
+          width={720}
+          height={360}
           src={recipe.strMealThumb}
           alt={recipe.strMeal}
           className="w-full h-48 object-cover rounded"
@@ -20,11 +30,12 @@ const RecipeCard = ({ recipe, handleDetailsOpen }) => {
       </Link>
       <div className="mt-4 flex space-x-2">
         <button
-          onClick={() => console.log("Add to cart:", recipe.idMeal)}
-          className="px-4 py-2 bg-gradient-to-b from-yellow-200 to-yellow-300 text-yellow-900 rounded-full"
+          onClick={handleAddToCart}
+          className="px-4 py-2 inline-flex items-center bg-gradient-to-b from-yellow-200 to-yellow-300 text-yellow-900 rounded-full"
           aria-label={`Add ${recipe.strMeal} to cart`}
         >
-          Add to Cart
+          <IoCart className="mr-2" size={20} />
+          {added ? "Added!" : "Add to Cart"}
         </button>
       </div>
     </div>

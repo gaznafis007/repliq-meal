@@ -9,7 +9,6 @@ import { IoArrowBack, IoShareSocial, IoCart, IoHeart } from "react-icons/io5";
 const RecipeDetails = () => {
   const { id } = useParams();
   const router = useRouter();
-  const [copied, setCopied] = useState(false);
 
   // Fetch recipe details
   const { data: recipe, isLoading, error } = useQuery({
@@ -18,6 +17,14 @@ const RecipeDetails = () => {
     enabled: !!id,
   });
 
+  const [copied, setCopied] = useState(false);
+  const { addToCart } = useCart();
+  const [added, setAdded] = useState(false);
+  const handleAddToCart = () => {
+    addToCart(recipe);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 3000);
+  };
   // Extract ingredients
   const ingredients = recipe
     ? Object.keys(recipe)
@@ -147,20 +154,12 @@ const RecipeDetails = () => {
             {/* Action Buttons */}
             <div className="mt-6 flex flex-wrap gap-4">
               <button
-                onClick={() => console.log("Add to cart:", recipe.idMeal)}
+                onClick={handleAddToCart}
                 className="inline-flex items-center px-6 py-2 bg-gradient-to-b from-yellow-200 to-yellow-300 text-yellow-900 rounded-full hover:to-red-300"
                 aria-label={`Add ${recipe.strMeal} to cart`}
               >
                 <IoCart className="mr-2" size={20} />
-                Add to Cart
-              </button>
-              <button
-                onClick={() => console.log("Add to wishlist:", recipe.idMeal)}
-                className="inline-flex items-center px-6 py-2 bg-gradient-to-b from-green-200 to-green-300 text-green-900 rounded-full hover:to-green-400"
-                aria-label={`Add ${recipe.strMeal} to wishlist`}
-              >
-                <IoHeart className="mr-2" size={20} />
-                Add to Wishlist
+                {added ? 'Added' : 'Add to Cart'}
               </button>
               <button
                 onClick={handleShare}

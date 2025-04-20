@@ -1,10 +1,20 @@
 "use client";
+import { useCart } from "@/hooks/useCart";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { IoCart } from "react-icons/io5";
 
 const RecipeCard = ({ recipe, handleDetailsOpen }) => {
   const isModalView = !!handleDetailsOpen; // Determine if used in RecipesList (modal) or AllRecipes (navigation)
+  const {addToCart} = useCart()
+  const [added, setAdded] = useState(false)
+
+  const handleAddToCart = () => {
+    addToCart(recipe);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition">
@@ -51,18 +61,12 @@ const RecipeCard = ({ recipe, handleDetailsOpen }) => {
       )}
       <div className="mt-4 flex space-x-2">
         <button
-          onClick={() => console.log("Add to cart:", recipe.idMeal)}
-          className="px-4 py-2 bg-gradient-to-b from-yellow-200 to-yellow-300 text-yellow-900 rounded-full hover:to-red-300"
+          onClick={handleAddToCart}
+          className="px-4 py-2 inline-flex items-center bg-gradient-to-b from-yellow-200 to-yellow-300 text-yellow-900 rounded-full hover:to-red-300"
           aria-label={`Add ${recipe.strMeal} to cart`}
         >
-          Add to Cart
-        </button>
-        <button
-          onClick={() => console.log("Add to wishlist:", recipe.idMeal)}
-          className="px-4 py-2 bg-gradient-to-b from-green-200 to-green-300 text-green-900 rounded-full hover:to-green-400"
-          aria-label={`Add ${recipe.strMeal} to wishlist`}
-        >
-          Add to Wishlist
+          <IoCart className="mr-2" size={20} />
+          {added ? "Added!" : "Add to Cart"}
         </button>
         {isModalView && (
           <button
