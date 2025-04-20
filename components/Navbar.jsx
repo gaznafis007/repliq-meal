@@ -91,7 +91,7 @@ const Navbar = () => {
                 </button>
               ) : (
                 <>
-                  <Link href="/signup" passHref>
+                  <Link href="/sign-up" passHref>
                     <button
                       className="px-4 py-2 text-yellow-800 font-semibold text-sm rounded-full hover:bg-yellow-100 transition"
                       aria-label="Sign up"
@@ -192,7 +192,7 @@ const Navbar = () => {
                 </button>
               ) : (
                 <>
-                  <Link href="/signup" passHref>
+                  <Link href="/sign-up" passHref>
                     <button
                       className="w-full py-3 px-6 text-center text-yellow-800 font-semibold text-sm rounded-full hover:bg-yellow-100 transition"
                       aria-label="Sign up"

@@ -4,39 +4,26 @@ import HttpKit from "@/common/helpers/HttpKit";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import React, { useState } from "react";
-import { IoArrowBack, IoShareSocial, IoCart, IoHeart } from "react-icons/io5";
+import { IoArrowBack, IoShareSocial, IoCart, IoHeart, IoTrash } from "react-icons/io5";
+
+import { toast } from "react-toastify";
 import { useCart } from "@/hooks/useCart";
-import { FaHeart } from "react-icons/fa";
+import { useUser } from "@/hooks/useUser";
 
 const RecipeDetails = () => {
   const { id } = useParams();
   const router = useRouter();
+  const { addToCart } = useCart();
+  const { user } = useUser();
+  const [copied, setCopied] = useState(false);
+  const [added, setAdded] = useState(false);
 
-  // Fetch recipe details
-  const {
-    data: recipe,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: recipe, isLoading, error } = useQuery({
     queryKey: ["recipe", id],
     queryFn: () => HttpKit.getRecipeDetails(id),
     enabled: !!id,
   });
-  const { addToCart, addToWishlist } = useCart();
-  const [copied, setCopied] = useState(false);
-  const [added, setAdded] = useState(false);
-  const [wishlisted, setWishlisted] = useState(false);
-  const handleAddToCart = () => {
-    addToCart(recipe);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 3000);
-  };
-  const handleAddWishlist = () => {
-    addToWishlist(recipe);
-    setWishlisted(true);
-    setTimeout(() => setWishlisted(false), 2000);
-  };
-  // Extract ingredients
+
   const ingredients = recipe
     ? Object.keys(recipe)
         .filter((key) => key.startsWith("strIngredient") && recipe[key])
@@ -46,7 +33,6 @@ const RecipeDetails = () => {
         }))
     : [];
 
-  // Share recipe URL
   const handleShare = () => {
     const url = window.location.href;
     navigator.clipboard.writeText(url).then(() => {
@@ -55,12 +41,26 @@ const RecipeDetails = () => {
     });
   };
 
+  const handleAddToCart = () => {
+    addToCart(recipe);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  const handleDelete = () => {
+    const updatedRecipes = JSON.parse(localStorage.getItem("userRecipes") || "[]").filter(
+      (r) => r.idMeal !== id
+    );
+    localStorage.setItem("userRecipes", JSON.stringify(updatedRecipes));
+    toast.success("Recipe deleted successfully!");
+    router.push("/");
+  };
+
   return (
-    <div className="bg-gray-50 min-h-screen py-16">
+    <div className="bg-gray-50 min-h-screen py-10">
       <div className="container mx-auto px-6">
-        {/* Back Button */}
         <button
-          onClick={() => router.push("/all-recipes")}
+          onClick={() => router.push("/recipes")}
           className="inline-flex items-center mb-6 text-yellow-900 hover:underline"
           aria-label="Back to all recipes"
         >
@@ -100,17 +100,15 @@ const RecipeDetails = () => {
         ) : (
           <div className="bg-white p-6 rounded-lg shadow-md animate-fade-in">
             <div className="md:flex md:space-x-6">
-              {/* Image */}
               <div className="relative w-full md:w-1/3 h-64">
                 <Image
-                  src={recipe.strMealThumb}
+                  src={recipe.strMealThumb || "/images/home/food.webp"}
                   alt={recipe.strMeal}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-lg"
                 />
               </div>
-              {/* Details */}
               <div className="mt-4 md:mt-0 flex-1">
                 <h1 className="text-3xl font-bold text-gray-800">
                   {recipe.strMeal}
@@ -135,7 +133,6 @@ const RecipeDetails = () => {
                 </div>
               </div>
             </div>
-            {/* Instructions */}
             <div className="mt-6">
               <h2 className="text-xl font-semibold text-gray-800">
                 Instructions
@@ -144,7 +141,6 @@ const RecipeDetails = () => {
                 {recipe.strInstructions}
               </p>
             </div>
-            {/* YouTube Link */}
             {recipe.strYoutube && (
               <div className="mt-6">
                 <h2 className="text-xl font-semibold text-gray-800">
@@ -162,7 +158,6 @@ const RecipeDetails = () => {
                 </a>
               </div>
             )}
-            {/* Action Buttons */}
             <div className="mt-6 flex flex-wrap gap-4">
               <button
                 onClick={handleAddToCart}
@@ -170,16 +165,15 @@ const RecipeDetails = () => {
                 aria-label={`Add ${recipe.strMeal} to cart`}
               >
                 <IoCart className="mr-2" size={20} />
-                {added ? "Added" : "Add to Cart"}
+                {added ? "Added!" : "Add to Cart"}
               </button>
               <button
-                onClick={handleAddWishlist}
-                className={`p-2 bg-gray-50 ${
-                  wishlisted ? "text-red-500" : "text-slate-800"
-                } rounded-full hover:bg-gray-100`}
-                aria-label={`Add ${recipe.strMeal} to cart`}
+                onClick={() => console.log("Add to wishlist:", recipe.idMeal)}
+                className="inline-flex items-center px-6 py-2 bg-gradient-to-b from-green-200 to-green-300 text-green-900 rounded-full hover:to-green-400"
+                aria-label={`Add ${recipe.strMeal} to wishlist`}
               >
-                <FaHeart size={20} />
+                <IoHeart className="mr-2" size={20} />
+                Add to Wishlist
               </button>
               <button
                 onClick={handleShare}
@@ -189,6 +183,16 @@ const RecipeDetails = () => {
                 <IoShareSocial className="mr-2" size={20} />
                 {copied ? "Copied!" : "Share"}
               </button>
+              {user && recipe.userId === user.email && (
+                <button
+                  onClick={handleDelete}
+                  className="inline-flex items-center px-6 py-2 bg-gradient-to-b from-red-200 to-red-300 text-red-900 rounded-full hover:to-red-400"
+                  aria-label={`Delete ${recipe.strMeal}`}
+                >
+                  <IoTrash className="mr-2" size={20} />
+                  Delete Recipe
+                </button>
+              )}
             </div>
           </div>
         )}
