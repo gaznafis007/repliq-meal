@@ -16,7 +16,7 @@ const Navbar = () => {
             <Link
               href="/"
               aria-label="logo"
-              className="flex space-x-2 items-center"
+              className="flex space-x-2 items-center cursor-pointer"
             >
               <span className="text-2xl font-bold text-yellow-900 ">
                 Tailus <span className="text-yellow-700 ">Feedus</span>
