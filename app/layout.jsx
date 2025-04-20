@@ -5,6 +5,8 @@ import Navbar from "@/components/Navbar";
 import TanstackProvider from "@/providers/TanstackProvider";
 import { CartProvider } from "@/context/ContextProvider";
 import Footer from "@/components/Footer";
+import { UserProvider } from "@/context/UserProvider";
+import { ToastContainer } from "react-toastify";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,11 +32,24 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <TanstackProvider>
+          <UserProvider>
           <CartProvider>
             <Navbar />
             <main className="flex-1 py-6">{children}</main>
             <Footer/>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
           </CartProvider>
+          </UserProvider>
         </TanstackProvider>
       </body>
     </html>
