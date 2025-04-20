@@ -40,7 +40,7 @@ const RecipeCard = ({ recipe, handleDetailsOpen }) => {
           <p className="text-gray-600">{recipe.strCategory}</p>
         </div>
       ) : (
-        <Link href={`/recipes/${recipe.idMeal}`} passHref>
+        <Link href={`/all-recipes/${recipe.idMeal}`} passHref>
           <div
             className="block cursor-pointer"
             aria-label={`View details for ${recipe.strMeal}`}

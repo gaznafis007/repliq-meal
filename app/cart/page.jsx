@@ -15,7 +15,7 @@ const Cart = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Your Cart</h1>
-          <Link href="/recipes" passHref>
+          <Link href="/all-recipes" passHref>
             <button
               className="inline-flex items-center text-yellow-900 hover:underline"
               aria-label="Continue shopping"

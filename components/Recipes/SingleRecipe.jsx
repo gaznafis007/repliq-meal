@@ -1,8 +1,10 @@
 "use client";
 import HttpKit from "@/common/helpers/HttpKit";
+import { useCart } from "@/hooks/useCart";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
+import { IoCart } from "react-icons/io5";
 
 const SingleRecipe = ({ id, setIsOpen }) => {
   const { data: recipe, isLoading, error } = useQuery({
@@ -10,7 +12,13 @@ const SingleRecipe = ({ id, setIsOpen }) => {
     queryFn: () => HttpKit.getRecipeDetails(id),
     enabled: !!id,
   });
-
+  const [added, setAdded] = useState(false);
+  const {addToCart} = useCart();
+  const handleAddToCart = () =>{
+    addToCart(recipe);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 3000)
+  }
   // Extract ingredients
   const ingredients = recipe
     ? Object.keys(recipe)
@@ -124,18 +132,12 @@ const SingleRecipe = ({ id, setIsOpen }) => {
           {/* Cart/Wishlist Buttons */}
           <div className="mt-6 flex space-x-4">
             <button
-              onClick={() => console.log("Add to cart:", recipe.idMeal)}
-              className="px-6 py-2 bg-gradient-to-b from-yellow-200 to-yellow-300 text-yellow-900 rounded-full hover:to-red-300"
+              onClick={handleAddToCart}
+              className="px-6 py-2 inline-flex items-center bg-gradient-to-b from-yellow-200 to-yellow-300 text-yellow-900 rounded-full hover:to-red-300"
               aria-label={`Add ${recipe.strMeal} to cart`}
             >
-              Add to Cart
-            </button>
-            <button
-              onClick={() => console.log("Add to wishlist:", recipe.idMeal)}
-              className="px-6 py-2 bg-gradient-to-b from-green-200 to-green-300 text-green-900 rounded-full hover:to-green-400"
-              aria-label={`Add ${recipe.strMeal} to wishlist`}
-            >
-              Add to Wishlist
+              <IoCart className="mr-2" size={20} />
+              {added ? "Added!" : "Add to Cart"}
             </button>
           </div>
         </div>
