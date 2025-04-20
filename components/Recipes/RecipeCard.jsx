@@ -3,12 +3,14 @@ import { useCart } from "@/hooks/useCart";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import { FaHeart } from "react-icons/fa";
 import { IoCart } from "react-icons/io5";
 
 const RecipeCard = ({ recipe, handleDetailsOpen }) => {
   const isModalView = !!handleDetailsOpen; // Determine if used in RecipesList (modal) or AllRecipes (navigation)
-  const {addToCart} = useCart()
+  const {addToCart, addToWishlist} = useCart()
   const [added, setAdded] = useState(false)
+  const [wishlisted, setWishlisted] = useState(false)
 
   const handleAddToCart = () => {
     addToCart(recipe);
@@ -16,6 +18,11 @@ const RecipeCard = ({ recipe, handleDetailsOpen }) => {
     setTimeout(() => setAdded(false), 2000);
   };
 
+  const handleAddWishlist = () =>{
+    addToWishlist(recipe)
+    setWishlisted(true)
+    setTimeout(() => setWishlisted(false), 2000)
+  }
   return (
     <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition">
       {isModalView ? (
@@ -67,6 +74,13 @@ const RecipeCard = ({ recipe, handleDetailsOpen }) => {
         >
           <IoCart className="mr-2" size={20} />
           {added ? "Added!" : "Add to Cart"}
+        </button>
+        <button
+          onClick={handleAddWishlist}
+          className={`p-2 bg-gray-50 ${wishlisted ? 'text-red-500' : 'text-slate-800'} rounded-full hover:bg-gray-100`}
+          aria-label={`Add ${recipe.strMeal} to cart`}
+        >
+          <FaHeart size={20} />
         </button>
         {isModalView && (
           <button

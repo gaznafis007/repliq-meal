@@ -4,21 +4,32 @@ import { useCart } from "@/hooks/useCart";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
+import { FaHeart } from "react-icons/fa";
 import { IoCart } from "react-icons/io5";
 
 const SingleRecipe = ({ id, setIsOpen }) => {
-  const { data: recipe, isLoading, error } = useQuery({
+  const {
+    data: recipe,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["recipe-details", id],
     queryFn: () => HttpKit.getRecipeDetails(id),
     enabled: !!id,
   });
-  const [added, setAdded] = useState(false);
-  const {addToCart} = useCart();
-  const handleAddToCart = () =>{
-    addToCart(recipe);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 3000)
-  }
+  const { addToCart, addToWishlist } = useCart();
+    const [added, setAdded] = useState(false);
+    const [wishlisted, setWishlisted] = useState(false);
+    const handleAddToCart = () => {
+      addToCart(recipe);
+      setAdded(true);
+      setTimeout(() => setAdded(false), 3000);
+    };
+    const handleAddWishlist = () => {
+      addToWishlist(recipe);
+      setWishlisted(true);
+      setTimeout(() => setWishlisted(false), 2000);
+    };
   // Extract ingredients
   const ingredients = recipe
     ? Object.keys(recipe)
@@ -108,7 +119,9 @@ const SingleRecipe = ({ id, setIsOpen }) => {
             </div>
           </div>
           <div className="mt-6">
-            <h3 className="text-lg font-semibold text-gray-800">Instructions</h3>
+            <h3 className="text-lg font-semibold text-gray-800">
+              Instructions
+            </h3>
             <p className="text-gray-600 mt-2 whitespace-pre-line">
               {recipe.strInstructions}
             </p>
@@ -138,6 +151,15 @@ const SingleRecipe = ({ id, setIsOpen }) => {
             >
               <IoCart className="mr-2" size={20} />
               {added ? "Added!" : "Add to Cart"}
+            </button>
+            <button
+              onClick={handleAddWishlist}
+              className={`p-2 bg-gray-50 ${
+                wishlisted ? "text-red-500" : "text-slate-800"
+              } rounded-full hover:bg-gray-100`}
+              aria-label={`Add ${recipe.strMeal} to cart`}
+            >
+              <FaHeart size={20} />
             </button>
           </div>
         </div>

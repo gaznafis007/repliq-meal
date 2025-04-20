@@ -6,25 +6,35 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { IoArrowBack, IoShareSocial, IoCart, IoHeart } from "react-icons/io5";
 import { useCart } from "@/hooks/useCart";
+import { FaHeart } from "react-icons/fa";
 
 const RecipeDetails = () => {
   const { id } = useParams();
   const router = useRouter();
 
   // Fetch recipe details
-  const { data: recipe, isLoading, error } = useQuery({
+  const {
+    data: recipe,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["recipe", id],
     queryFn: () => HttpKit.getRecipeDetails(id),
     enabled: !!id,
   });
-
+  const { addToCart, addToWishlist } = useCart();
   const [copied, setCopied] = useState(false);
-  const { addToCart } = useCart();
   const [added, setAdded] = useState(false);
+  const [wishlisted, setWishlisted] = useState(false);
   const handleAddToCart = () => {
     addToCart(recipe);
     setAdded(true);
     setTimeout(() => setAdded(false), 3000);
+  };
+  const handleAddWishlist = () => {
+    addToWishlist(recipe);
+    setWishlisted(true);
+    setTimeout(() => setWishlisted(false), 2000);
   };
   // Extract ingredients
   const ingredients = recipe
@@ -160,7 +170,16 @@ const RecipeDetails = () => {
                 aria-label={`Add ${recipe.strMeal} to cart`}
               >
                 <IoCart className="mr-2" size={20} />
-                {added ? 'Added' : 'Add to Cart'}
+                {added ? "Added" : "Add to Cart"}
+              </button>
+              <button
+                onClick={handleAddWishlist}
+                className={`p-2 bg-gray-50 ${
+                  wishlisted ? "text-red-500" : "text-slate-800"
+                } rounded-full hover:bg-gray-100`}
+                aria-label={`Add ${recipe.strMeal} to cart`}
+              >
+                <FaHeart size={20} />
               </button>
               <button
                 onClick={handleShare}

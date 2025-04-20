@@ -13,12 +13,42 @@ export const CartProvider = ({ children }) => {
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
+    const savedWishlist = localStorage.getItem("wishlist");
+    if(savedWishlist){
+        setWishlist(JSON.parse(savedWishlist))
+    }
   }, []);
 
-//   // Save cart to localStorage on update
-//   useEffect(() => {
-//     localStorage.setItem("cart", JSON.stringify(cart));
-//   }, [cart]);
+    // Add recipe to wishlist
+    const addToWishlist = (recipe) =>{
+        setWishlist((prevWishlist) => {
+            // Avoid duplicates
+            if (prevWishlist.some((item) => item.idMeal === recipe.idMeal)) {
+                return prevWishlist;
+            }
+            // Store minimal recipe data
+            const wishlistItem = {
+                idMeal: recipe.idMeal,
+                strMeal: recipe.strMeal,
+                strMealThumb: recipe.strMealThumb,
+            };
+            localStorage.setItem("wishlist", JSON.stringify([...prevWishlist, wishlistItem]));
+            return [...prevWishlist, wishlistItem];
+        });
+
+    }
+    // Remove recipe from wishlist
+    const removeFromWishlist = (idMeal) => {
+        localStorage.setItem("wishlist", JSON.stringify(wishlist.filter((item) => item.idMeal !== idMeal)));
+        setWishlist((prevWishlist) => prevWishlist.filter((item) => item.idMeal !== idMeal));
+    };
+
+    // Clear wishlist
+    const clearWishlist = () => {
+        setWishlist([]);
+        localStorage.removeItem("wishlist");
+    };
+
 
   // Add recipe to cart
   const addToCart = (recipe) => {
@@ -53,7 +83,7 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart }}
+      value={{ cart, addToCart, removeFromCart, clearCart, wishlist, addToWishlist, removeFromWishlist, clearWishlist }}
     >
       {children}
     </CartContext.Provider>

@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { IoMenu, IoClose, IoCart, IoPerson } from "react-icons/io5";
 import { useCart } from "@/hooks/useCart";
+import { FaHeart } from "react-icons/fa";
 
 const Navbar = () => {
-  const { cart } = useCart();
+  const { cart, wishlist } = useCart();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -41,6 +42,14 @@ const Navbar = () => {
                   <span className="flex items-center hover:text-yellow-700 transition">
                     <IoCart className="mr-1" size={18} />
                     Cart ({cart.length})
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/wishlist" passHref>
+                  <span className="flex items-center hover:text-yellow-700 transition">
+                    <FaHeart className="mr-1" size={18} />
+                    Wishlist ({wishlist.length})
                   </span>
                 </Link>
               </li>
@@ -97,6 +106,14 @@ const Navbar = () => {
                   >
                     <IoCart className="inline mr-1" size={18} />
                     Cart ({cart.length})
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/wishlist" passHref>
+                  <span className="flex items-center hover:text-yellow-700 transition">
+                    <FaHeart className="mr-1" size={18} />
+                    Wishlist ({wishlist.length})
                   </span>
                 </Link>
               </li>
