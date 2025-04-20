@@ -183,8 +183,8 @@ The app integrates with the MealDB API for recipe data and uses `localStorage` f
 
 ## 📝 Submission Guidelines
 
-- **GitHub Link**: [https://github.com/your-username/tailus-feedus](https://github.com/gaznafis007/repliq-meal)
-- **Live Link**: [https://tailus-feedus.vercel.app](https://repliq-meal.vercel.app/)
+- **GitHub Link**: [https://github.com/gaznafis007/repliq-meal](https://github.com/gaznafis007/repliq-meal)
+- **Live Link**: [https://repliq-meal.vercel.app/](https://repliq-meal.vercel.app/)
 - **Original Repository**: Cloned from [https://github.com/khalek-repliq/frontend-assessment](https://github.com/khalek-repliq/frontend-assessment), `.git` folder removed.
 - **Hosting**: Deployed on Vercel for a live demo.
 
