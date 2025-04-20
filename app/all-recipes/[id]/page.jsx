@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import React, { useState } from "react";
 import { IoArrowBack, IoShareSocial, IoCart, IoHeart } from "react-icons/io5";
+import { useCart } from "@/hooks/useCart";
 
 const RecipeDetails = () => {
   const { id } = useParams();
