@@ -38,11 +38,11 @@ const RecipeDetails = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen py-10">
+    <div className="bg-gray-50 min-h-screen py-16">
       <div className="container mx-auto px-6">
         {/* Back Button */}
         <button
-          onClick={() => router.push("/recipes")}
+          onClick={() => router.push("/all-recipes")}
           className="inline-flex items-center mb-6 text-yellow-900 hover:underline"
           aria-label="Back to all recipes"
         >

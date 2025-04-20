@@ -26,13 +26,6 @@ const RecipeCard = ({ recipe, handleDetailsOpen }) => {
         >
           Add to Cart
         </button>
-        <button
-          onClick={() => console.log("Add to wishlist:", recipe.idMeal)}
-          className="px-4 py-2 bg-gradient-to-b from-green-200 to-green-300 text-green-900 rounded-full"
-          aria-label={`Add ${recipe.strMeal} to wishlist`}
-        >
-          Add to Wishlist
-        </button>
       </div>
     </div>
   );
