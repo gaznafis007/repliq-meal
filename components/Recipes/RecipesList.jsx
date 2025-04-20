@@ -52,14 +52,14 @@ const RecipesList = () => {
   }, 300);
 
   const handleDetailsOpen = (id) => {
-    setOpenDetails(true);
     setRecipeId(id);
+    setOpenDetails(true);
   };
 
   return (
     <div className="bg-gray-50 py-10">
-      <div className="container mx-auto">
-        <h1 className="text-2xl font-bold">Top Recipes</h1>
+      <div className="container mx-auto px-6">
+        <h1 className="text-2xl font-bold text-gray-800">Top Recipes</h1>
         {/* Search form */}
         <div className="w-full mt-12">
           <div className="relative flex flex-col md:flex-row items-center p-1 rounded-full bg-white border border-yellow-200 shadow-md md:p-2 gap-2">
@@ -134,7 +134,7 @@ const RecipesList = () => {
                 Error loading recipes: {error.message}
               </div>
             ) : recipes?.length > 0 ? (
-              <div className="grid gap-6 md:mx-auto md:w-8/12 lg:w-full lg:grid-cols-3">
+              <div className="grid gap-6 md:mx-auto md:w-8/12 lg:w-full lg:grid-cols-3 animate-fade-in">
                 {recipes.map((recipe) => (
                   <RecipeCard
                     key={recipe?.idMeal}

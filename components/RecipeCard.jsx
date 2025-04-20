@@ -5,7 +5,7 @@ import React from "react";
 const RecipeCard = ({ recipe, handleDetailsOpen }) => {
   return (
     <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition">
-      <Link href={`/recipes/${recipe.idMeal}`} passHref>
+      <Link href={`/all-recipes/${recipe.idMeal}`} passHref>
         <Image
         width={720}
         height={360}
